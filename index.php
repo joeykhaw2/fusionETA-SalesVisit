@@ -40,18 +40,6 @@
         background-color: #EE5828;
       }
 
-      #nextBtn3 {
-        background-color: #EE5828;
-      }
-
-      #nextBtn4 {
-        background-color: #EE5828;
-      }
-
-      #nextBtn5 {
-        background-color: #EE5828;
-      }
-
       #addInterflourProductBtn {
         background-color: #EE5828;
       }
@@ -64,35 +52,7 @@
         background-color: #EE5828;
       }
 
-      #addCompetitorProductBtn {
-        background-color: #EE5828;
-      }
-
-      #addCompetitorProductBtn:hover {
-        background-color: #00405C;
-      }
-
-      #saveCompetitorProductBtn {
-        background-color: #EE5828;
-      }
-
-      #stocklistAddProductBtn {
-        background-color: #EE5828;
-      }
-
-      #stocklistAddProductBtn:hover {
-        background-color: #00405C;
-      }
-
-      #saveStocklistProductBtn {
-        background-color: #EE5828;
-      }
-
-      #submitBtn {
-        background-color: #EE5828;
-      }
-
-      #submitBtn1 {
+      #submitFormButton {
         background-color: #EE5828;
       }
 
@@ -126,14 +86,6 @@
         font-weight: bold;
       }
 
-      #noProductsText3 {
-        font-weight: bold;
-      }
-
-      #noProductsText5 {
-        font-weight: bold;
-      }
-
       .nav-link.active {
         background-color: rgba(255, 255, 255, 0.7) !important; /* bg color for the active tab */
         color: #FE541E !important; /* text color for the active tab */
@@ -145,11 +97,6 @@
 <body>
   <input type="hidden" id="id" value="<?php echo isset($_GET['ticketId']) ? htmlspecialchars($_GET['ticketId']) : ''; ?>">
 
-  <div style="position: absolute; top: 10px; left: 10px;">
-    <a href="siteVisitMenu.php">
-    <i class="fas fa-chevron-left" style="color: #00567D;"></i>
-    </a>
-  </div>
   <br>
   <div class="container">
     <!-- Logo -->
@@ -301,7 +248,7 @@
   <div class="tab-pane fade" id="section3" role="tabpanel" aria-labelledby="section3-tab">
     <div class="section-container" id="section3">
         <div class="container custom-rounded-container p-4">
-            <p class="section-name">FusionETA Product</p>
+            <p class="section-name">Interflour Product</p>
             <p id="noProductsText1" class="text-center">No Products Yet</p>
             <p id="noProductsText2" class="text-center">Add a product by clicking on the add button below.</p>
             <div id="productContainer" class="product-container"></div>
@@ -338,10 +285,9 @@
             </div>
         </div>
       <br>
-      <button type="button" id="submitBtn" class="btn btn-primary d-block mx-auto">Submit</button>
+      <button type="button" id="submitFormButton" class="btn btn-primary d-block mx-auto">Submit</button>
     </div>
   </div>
-
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -372,10 +318,21 @@
     // Counter to keep track of the product number [Interflour]
     var productCounter = 1;
 
+  	// Array to store product details (product name and quantity)
+    const productArray = [];
+
     // Handle save button clicked [Interflour]
     saveInterflourProductBtn.addEventListener('click', function() {
       var productName = productNameInput.value.trim();
       var productQty = productQtyInput.value.trim();
+
+      var productItem = {
+        productName: productName,
+        productQty: productQty
+      };
+
+      productArray.push(productItem);
+      console.log(productArray);
 
       if (productName !== '' && productQty !== '') {
         var productDetailsContainer = document.createElement('div');
@@ -401,7 +358,7 @@
 
         // Create the title element for the product
         var productTitle = document.createElement('p');
-        productTitle.classList.add('product-title'); // Add a class for identification
+        productTitle.classList.add('product-title'); 
         productTitle.textContent = 'Product ' + productCounter;
         productTitle.style.fontWeight = 'bold';
         productTitle.style.marginBottom = '0';
@@ -409,7 +366,7 @@
 
         // Create a single line element for product details
         var productDetails = document.createElement('p');
-        productDetails.classList.add('product-details'); // Add a class for identification
+        productDetails.classList.add('product-details'); 
         productDetails.textContent = ' Product Name: ' + productName + '  ,  ' + 'Quantity: ' + productQty;
         productDetails.style.fontSize = '12px';
         productDetails.style.marginBottom = '0';
@@ -460,21 +417,33 @@
       goToSection(3);
     });
 
-    var submitBtn = document.getElementById('submitBtn');
+    var submitBtn = document.getElementById('submitFormButton');
 
-    submitBtn.addEventListener('click', function() {
-      window.location.href = "siteVisitFormSubmissionConfirmation.php";
-    });
-  });
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
   const nextButton = document.getElementById("nextBtn1");
   const nextButton2 = document.getElementById("nextBtn2");
+  const submitButton = document.getElementById("submitFormButton");
+
+  // variable to store deal ID
+  let dealID;
 
   const section1Data = {
     visitType: null,
     visitDate: null,
+  };
+
+  const section2Data = {
+      customerType: null,
+      storeStatus: null,
+      storeName: null,
+      owner: null,
+      contactNumber: null,
+      address1: null,
+      address2: null,
+      address3: null,
+      area: null,
+      postcode: null,
+      city: null,
+      businessType: null,
   };
 
   nextButton.addEventListener("click", async function () {
@@ -536,24 +505,42 @@ document.addEventListener("DOMContentLoaded", function () {
     const customerType = cusTypeMapping[cusTypeText];
     const storeStatus = storeStatusMapping[storeStatusText];
     const businessType = businessTypeMapping[businessTypeText];
+    
+    section2Data.customerType = customerType;
+    section2Data.storeStatus = storeStatus;
+    section2Data.storeName = storeName;
+    section2Data.owner = owner;
+    section2Data.contactNumber = contactNumber;
+    section2Data.address1 = address1;
+    section2Data.address2 = address2;
+    section2Data.address3 = address3;
+    section2Data.area = area;
+    section2Data.postcode = postcode;
+    section2Data.city = city;
+    section2Data.businessType = businessType;
+  });
 
-    console.log(customerType);
-    console.log(storeStatus);
-    console.log(storeName);
-    console.log(owner);
-    console.log(contactNumber);
-    console.log(address1);
-    console.log(address2);
-    console.log(address3);
-    console.log(area);
-    console.log(postcode);
-    console.log(city);
-    console.log(businessType);
+  submitButton.addEventListener("click", async function () {
 
+    window.location.href = "siteVisitFormSubmissionConfirmation.php";
+    
     const visitType = section1Data.visitType;
     const visitDate = section1Data.visitDate;
 
-    // transmit section 1 data 
+    const customerType = section2Data.customerType;
+    const storeStatus = section2Data.storeStatus;
+    const storeName = section2Data.storeName;
+    const owner = section2Data.owner;
+    const contactNumber = section2Data.contactNumber;
+    const address1 = section2Data.address1;
+    const address2 = section2Data.address2;
+    const address3 = section2Data.address3;
+    const area = section2Data.area;
+    const postcode = section2Data.postcode;
+    const city = section2Data.city;
+    const businessType = section2Data.businessType;
+
+    // create new deal with section 1 info 
     const url1 = 'https://fusioneta.bitrix24.com/rest/39/2k2mww3ih9jxzioo/crm.deal.add.json';
     const requestData1 = {
       fields: {
@@ -564,7 +551,6 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     try {
-      // Send API request using Fetch API
       const response = await fetch(url1, {
         method: "POST",
         headers: {
@@ -575,11 +561,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const responseData = await response.json();
       console.log("API response for section 1:", responseData);
-    } catch (error) {
-      console.error("API error for section 1:", error);
-    }
 
-    // transmit section 2 info to bitrix through REST API
+      // Retrieve the deal ID from API response
+      if (responseData.result) {
+        dealID = responseData.result;
+        console.log("Deal ID:", dealID);
+      }
+      } catch (error) {
+        console.error("API error for section 1:", error);
+      }
+
+    // create new SPA record to store section 2 info
     const url2 = 'https://fusioneta.bitrix24.com/rest/39/2k2mww3ih9jxzioo/crm.item.add.json?entityTypeId=182' +
     '&fields[ufCrm40_1693375016]=' + customerType +
     '&fields[ufCrm40_1693375103]=' + storeStatus +
@@ -600,82 +592,131 @@ document.addEventListener("DOMContentLoaded", function () {
     } catch (error) {
       console.log(error);
     }
+    
+    // send section 3 data - associate products with deal
+    try {
+      const productDetails = [];
+
+      const productMappings = {
+        'Bitrix24 Professional': { PRODUCT_ID: 1634, PRICE: 10000 },
+        'Bitrix24 Standard': { PRODUCT_ID: 1630, PRICE: 5000 },
+        'Gatotkaca 1kg': { PRODUCT_ID: 482, PRICE: 40 },
+        'Kompas 1kg': { PRODUCT_ID: 476, PRICE: 55 },
+        'ABCD': { PRODUCT_ID: 1678, PRICE: 20 },
+      };
+
+      productArray.forEach(productsItem => {
+        const productName = productsItem.productName;
+        const productQuantity = productsItem.productQty;
+        const productInfo = productMappings[productName] || null; // Set to null if product not found (new product)
+        productDetails.push({ 
+          PRODUCT_ID: productInfo.PRODUCT_ID,
+          QUANTITY: productQuantity,
+          PRICE: productInfo.PRICE,
+        });      
+    });
+
+      console.log(productDetails);
+
+      // Transmit product details to Bitrix24
+      if (productDetails.length > 0 && dealID) {
+        const setProductRowsUrl = `https://fusioneta.bitrix24.com/rest/39/2k2mww3ih9jxzioo/crm.deal.productrows.set.json?ID=${dealID}`;
+        const productRowsData = {
+          rows: productDetails,
+        };
+
+        const productRowsResponse = await fetch(setProductRowsUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(productRowsData),
+        });
+
+        const productRowsResponseData = await productRowsResponse.json();
+        console.log('API response for setting product rows:', productRowsResponseData);
+      } else {
+        console.error("Deal ID is missing. Section 1 might not have been successful.")
+      } 
+    } catch (error) {
+      console.error('API error:', error);
+    }
   });
 
-    //fetch store list
-    const inputElement = document.getElementById("stores");
-    const datalistElement = document.getElementById("storeOptions");
+  //fetch store list
+  const inputElement = document.getElementById("stores");
+  const datalistElement = document.getElementById("storeOptions");
 
-    const fetchItems = async (start = 0) => {
-        try {
-            const response = await fetch(`https://fusioneta.bitrix24.com/rest/39/2k2mww3ih9jxzioo/crm.item.list.json?entityTypeId=182&start=${start}`);
-            const data = await response.json();
-            return data.result.items;
-        } catch (error) {
-            console.log(error);
-            return [];
-        }
-    };
-
-    const populateDatalist = async () => {
-        datalistElement.innerHTML = "";
-
-        let start = 0;
-        let allItems = [];
-
-        while (true) {
-            const items = await fetchItems(start);
-            if (items.length === 0) {
-                break;
-            }
-
-            for (const item of items) {
-                // Check if the item title is already in the allItems array
-                const isDuplicate = allItems.some(existingItem => existingItem.title === item.title);
-
-                if (!isDuplicate) {
-                    allItems.push(item);
-                    const optionElement = document.createElement("option");
-                    optionElement.value = item.title;
-                    optionElement.dataset.id = item.id;
-                    datalistElement.appendChild(optionElement);
-                }
-            }
-
-            start += items.length;
-        }
-    };
-
-    populateDatalist();
-
-    //fetch product list
-    const productInput = document.getElementById("product");
-    const productDatalist = document.getElementById("productOptions");
-
-    const fetchProductNames = async () => {
+  const fetchItems = async (start = 0) => {
       try {
-        const response = await fetch('https://fusioneta.bitrix24.com/rest/39/2k2mww3ih9jxzioo/crm.product.list.json');
-        const data = await response.json();
-        return data.result;
+          const response = await fetch(`https://fusioneta.bitrix24.com/rest/39/2k2mww3ih9jxzioo/crm.item.list.json?entityTypeId=182&start=${start}`);
+          const data = await response.json();
+          return data.result.items;
       } catch (error) {
-        console.error("Failed to fetch product names:", error);
-        return [];
+          console.log(error);
+          return [];
       }
-    };
+  };
 
-    const populateProductDatalist = async () => {
-      productDatalist.innerHTML = "";
+  const populateDatalist = async () => {
+    datalistElement.innerHTML = "";
 
-      const productNames = await fetchProductNames();
-      productNames.forEach(product => {
-        const optionElement = document.createElement("option");
-        optionElement.value = product.NAME;
-        productDatalist.appendChild(optionElement);
-      });
-    };
+    let start = 0;
+    let allItems = [];
 
-    // Call the populateProductDatalist function when the modal is shown
-    document.getElementById('exampleModal').addEventListener('shown.bs.modal', populateProductDatalist);
+    while (true) {
+      const items = await fetchItems(start);
+      if (items.length === 0) {
+        break;
+      }
+
+      for (const item of items) {
+        // Check if the item title is already in the allItems array
+        const isDuplicate = allItems.some(existingItem => existingItem.title === item.title);
+
+        if (!isDuplicate) {
+          allItems.push(item);
+          const optionElement = document.createElement("option");
+          optionElement.value = item.title;
+          optionElement.dataset.id = item.id;
+          datalistElement.appendChild(optionElement);
+        }
+      }
+      start += items.length;
+    }
+  };
+
+  populateDatalist();
+
+  //fetch product list
+  const productInput = document.getElementById("product");
+  const productDatalist = document.getElementById("productOptions");
+
+  const fetchProductNames = async () => {
+    try {
+      const response = await fetch('https://fusioneta.bitrix24.com/rest/39/2k2mww3ih9jxzioo/crm.product.list.json');
+      const data = await response.json();
+      return data.result;
+    } catch (error) {
+      console.error("Failed to fetch product names:", error);
+      return [];
+    }
+  };
+
+  const populateProductDatalist = async () => {
+    productDatalist.innerHTML = "";
+
+    const productNames = await fetchProductNames();
+    productNames.forEach(product => {
+      const optionElement = document.createElement("option");
+      optionElement.value = product.NAME;
+      productDatalist.appendChild(optionElement);
+    });
+  };
+
+  // Call the populateProductDatalist function when the modal is shown
+  document.getElementById('exampleModal').addEventListener('shown.bs.modal', populateProductDatalist);
+
 });
 </script>
 
@@ -688,32 +729,10 @@ document.addEventListener("DOMContentLoaded", function () {
     cursor: pointer;
   }
 
-  .product-remove-icon1 {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    color: #00567D;
-    cursor: pointer;
-  }
-
-  .product-remove-icon2 {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    color: #00567D;
-    cursor: pointer;
-  }
-
   .product-details-container {
     position: relative;
   }
 
-  #removeAttachmentBtn {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-}
-
 </style>
 </body>
 </html>
-
