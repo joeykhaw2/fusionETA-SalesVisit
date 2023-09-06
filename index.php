@@ -694,7 +694,7 @@
 
   const fetchProductNames = async () => {
     try {
-      const response = await fetch('https://fusioneta.bitrix24.com/rest/39/2k2mww3ih9jxzioo/crm.product.list.json');
+      const response = await fetch('https://fusioneta.bitrix24.com/rest/39/2k2mww3ih9jxzioo/crm.product.list.json?filter[SECTION_ID][0]=268');
       const data = await response.json();
       return data.result;
     } catch (error) {
