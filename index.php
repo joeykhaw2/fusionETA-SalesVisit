@@ -521,8 +521,6 @@
   });
 
   submitButton.addEventListener("click", async function () {
-
-    window.location.href = "siteVisitFormSubmissionConfirmation.php";
     
     const visitType = section1Data.visitType;
     const visitDate = section1Data.visitDate;
